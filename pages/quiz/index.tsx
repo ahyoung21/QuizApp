@@ -1,10 +1,10 @@
 import React from 'react';
-import QuizStart from '../components/quizStart';
+import Quiz from '../../components/quiz';
 
 const Index = () => {
   return (
     <>
-      <QuizStart />
+      <Quiz />
     </>
   );
 };

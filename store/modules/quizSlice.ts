@@ -6,32 +6,31 @@ import {
 } from '@reduxjs/toolkit';
 import * as config from '../../common/config';
 
+export type answerType = { [index: string]: string };
+export type quizType = {
+  category: string;
+  correct_answer: string;
+  difficulty: string;
+  incorrect_answers: string[];
+  question: string;
+  type: string;
+};
 export interface QuizState {
-  value: number;
+  data: quizType[];
+  currentStep: number;
+  answerValue: answerType[];
+  incorrectAnswerValue: answerType[];
+  startTime: string;
   status: string;
-  data: {
-    name: string;
-    weather: [];
-    main: {
-      temp: number;
-      temp_min: number;
-      temp_max: number;
-    };
-  };
 }
 
 const initialState: QuizState = {
-  value: 0,
+  data: [],
+  currentStep: 0,
+  answerValue: [],
+  incorrectAnswerValue: [],
+  startTime: '',
   status: '',
-  data: {
-    name: '',
-    weather: [],
-    main: {
-      temp: 0,
-      temp_min: 0,
-      temp_max: 0,
-    },
-  },
 };
 
 const asyncQuizFetch = createAsyncThunk(
@@ -53,24 +52,11 @@ export const quizSlice = createSlice({
   name: 'quiz',
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
-    },
-    decrement: (
+    dayAction: (
       state: Draft<typeof initialState>,
-      action: PayloadAction<number>
+      action: PayloadAction<string>
     ) => {
-      state.value -= action.payload;
-    },
-    incrementByAmount: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<number>
-    ) => {
-      state.value += action.payload;
+      state.startTime = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -88,7 +74,7 @@ export const quizSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = quizSlice.actions;
+export const { dayAction } = quizSlice.actions;
 
 export default quizSlice.reducer;
 export { asyncQuizFetch };

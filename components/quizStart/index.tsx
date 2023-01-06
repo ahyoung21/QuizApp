@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react';
+import Router from 'next/router';
 import { useSelector, useDispatch } from '../../store/store';
-import { asyncQuizFetch } from '../../store/modules/quizSlice';
+import { dayAction, asyncQuizFetch } from '../../store/modules/quizSlice';
 import Button from '../layout/button/index';
 import { QuizStartBox } from './style';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import bgQuiz from '../../public/images/bg_quiz.jpg';
 
 const QuizStart = () => {
   const data = useSelector((state) => state.quiz.data);
+  const startTime = useSelector((state) => state.quiz.startTime);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('data', data);
+    dispatch(dayAction(dayjs().format('YYYY-MM-DD HH:mm:ss.SSS')));
+    Router.push('/quiz');
+    console.log('startTime', startTime);
   }, []);
 
   const onClickQuiz = () => {
