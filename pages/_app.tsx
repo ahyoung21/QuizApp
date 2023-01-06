@@ -28,11 +28,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         </Head>
         <GlobalStyle />
         <ThemeProvider theme={theme}>
-          <Header />
+          {/* <Header /> */}
           <main>
             <Component {...pageProps} />
           </main>
-          <Footer />
+          {/* <Footer /> */}
         </ThemeProvider>
       </PersistGate>
     </Provider>

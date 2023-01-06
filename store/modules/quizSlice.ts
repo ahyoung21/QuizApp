@@ -37,9 +37,15 @@ const initialState: QuizState = {
 const asyncQuizFetch = createAsyncThunk(
   'quizSlice/asyncWeatherFetch',
   async () => {
-    const response = await fetch(`${config.QUIZ_API}?amount=10&type=multiple`);
-    const data = await response.json();
-    return data;
+    try {
+      const response = await fetch(
+        `${config.QUIZ_API}?amount=10&type=multiple`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      alert(config.MESSAGE['common-error']);
+    }
   }
 );
 
