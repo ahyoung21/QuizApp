@@ -1,9 +1,4 @@
-import {
-  createSlice,
-  PayloadAction,
-  Draft,
-  createAsyncThunk,
-} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, Draft, createAsyncThunk } from '@reduxjs/toolkit';
 import * as config from '../../common/config';
 
 export type answerType = { [index: string]: string };
@@ -33,30 +28,34 @@ const initialState: QuizState = {
   status: '',
 };
 
-const asyncQuizFetch = createAsyncThunk(
-  'quizSlice/asyncWeatherFetch',
-  async () => {
-    try {
-      const response = await fetch(
-        `${config.QUIZ_API}?amount=10&type=multiple`
-      );
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      alert(config.MESSAGE['common-error']);
-    }
+const asyncQuizFetch = createAsyncThunk('quizSlice/asyncWeatherFetch', async () => {
+  try {
+    const response = await fetch(`${config.QUIZ_API}?amount=10&type=multiple`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    alert(config.MESSAGE['common-error']);
   }
-);
+});
 
 export const quizSlice = createSlice({
   name: 'quiz',
   initialState,
   reducers: {
-    dayAction: (
-      state: Draft<typeof initialState>,
-      action: PayloadAction<string>
-    ) => {
+    dayAction: (state: Draft<typeof initialState>, action: PayloadAction<string>) => {
       state.startTime = action.payload;
+    },
+    stepAction: (state: Draft<typeof initialState>, action: PayloadAction<number>) => {
+      state.currentStep = state.currentStep + action.payload;
+    },
+    answerAction: (state: Draft<typeof initialState>, action: PayloadAction<answerType[]>) => {
+      state.answerValue = [...action.payload];
+    },
+    incorrectAnswerAction: (
+      state: Draft<typeof initialState>,
+      action: PayloadAction<answerType[]>
+    ) => {
+      state.incorrectAnswerValue = [...action.payload];
     },
   },
   extraReducers: (builder) => {
@@ -74,7 +73,7 @@ export const quizSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { dayAction } = quizSlice.actions;
+export const { answerAction, incorrectAnswerAction, stepAction, dayAction } = quizSlice.actions;
 
 export default quizSlice.reducer;
 export { asyncQuizFetch };

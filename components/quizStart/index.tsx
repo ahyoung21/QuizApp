@@ -9,15 +9,11 @@ import Image from 'next/image';
 import bgQuiz from '../../public/images/bg_quiz.jpg';
 
 const QuizStart = () => {
-  const data = useSelector((state) => state.quiz.data);
-  const startTime = useSelector((state) => state.quiz.startTime);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('data', data);
     dispatch(dayAction(dayjs().format('YYYY-MM-DD HH:mm:ss.SSS')));
     Router.push('/quiz');
-    console.log('startTime', startTime);
   }, []);
 
   const onClickQuiz = () => {
