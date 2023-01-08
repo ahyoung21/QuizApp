@@ -52,11 +52,23 @@ const Quiz = () => {
   };
 
   useEffect(() => {
+    // console.log(
+    //   quizData.map((item) => {
+    //     return item.correct_answer;
+    //   })
+    // );
+  }, [currentStep]);
+
+  useEffect(() => {
     setAnswerFlag(false);
 
     if (currentStep !== 0 && currentStep === quizData.length) {
       setIsCompleted(true);
     }
+
+    console.log('currentStep', currentStep);
+    console.log('answerValue', answerValue);
+    console.log('incorrectAnswerValue', incorrectAnswerValue);
   }, [currentStep]);
 
   useEffect(() => {

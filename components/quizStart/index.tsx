@@ -10,14 +10,16 @@ import bgQuiz from '../../public/images/bg_quiz.jpg';
 
 const QuizStart = () => {
   const dispatch = useDispatch();
+  const currentStep = useSelector((state) => state.quiz.currentStep);
 
   useEffect(() => {
     dispatch(dayAction(dayjs().format('YYYY-MM-DD HH:mm:ss.SSS')));
-    Router.push('/quiz');
+    console.log('currentStep', currentStep);
   }, []);
 
   const onClickQuiz = () => {
     dispatch(asyncQuizFetch());
+    Router.push('/quiz');
   };
 
   return (
