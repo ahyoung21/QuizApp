@@ -16,6 +16,7 @@ export const IncorrectAnswerNoteBox = styled.div`
         height: 7rem;
         font-weight: 400;
         font-size: 1.8rem;
+        vertical-align: middle;
       }
     }
 

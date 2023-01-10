@@ -28,4 +28,15 @@ export const GlobalStyle = createGlobalStyle`
             fill: #f2f3f4;
         }
     }
+    pre {
+		white-space: break-spaces;
+	}
+
+    h3 {
+        margin-bottom: 2rem;
+        font-weight: 700;
+        font-size: 2.4rem;
+        color: rgb(0, 200, 150);
+        line-height: 1.3;
+    }
 `;
