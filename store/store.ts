@@ -1,12 +1,10 @@
+import logger from 'redux-logger';
 import { configureStore } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import { combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import quizSlice from './modules/quizSlice';
-import {
-  useDispatch as useDispatchBase,
-  useSelector as useSelectorBase,
-} from 'react-redux';
+import { useDispatch as useDispatchBase, useSelector as useSelectorBase } from 'react-redux';
 
 const persistConfig = {
   key: 'root',
@@ -24,7 +22,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(logger),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
