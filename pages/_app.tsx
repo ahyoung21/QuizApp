@@ -1,9 +1,10 @@
 import type { AppProps } from 'next/app';
-
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { store } from '../store/store';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
+import { useState } from 'react';
 
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
@@ -15,27 +16,30 @@ import Footer from '../components/layout/footer';
 const persistor = persistStore(store);
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const [client] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
+
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <meta property="og:title" content="title" />
-          <meta property="og:description" content="description" />
-          <meta property="og:image" content="" />
-          <link rel="icon" href="/favicon.ico" />
-          <title>project</title>
-        </Head>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-          {/* <Header /> */}
-          <main>
-            <Component {...pageProps} />
-          </main>
-          {/* <Footer /> */}
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+    <QueryClientProvider client={client}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <GlobalStyle />
+          <ThemeProvider theme={theme}>
+            <main>
+              <Component {...pageProps} />
+            </main>
+          </ThemeProvider>
+        </PersistGate>
+      </Provider>
+    </QueryClientProvider>
   );
 };
 
