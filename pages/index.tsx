@@ -1,7 +1,7 @@
-import React from 'react';
+import { NextPage } from 'next';
 import QuizStart from '../components/quizStart';
 
-const Index = () => {
+const Index: NextPage = () => {
   return (
     <>
       <QuizStart />

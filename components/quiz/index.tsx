@@ -1,16 +1,15 @@
 import React, { useState, useEffect, KeyboardEvent } from 'react';
 import Router from 'next/router';
 import { useSelector, useDispatch } from '../../store/store';
-import {
-  stepAction,
-  answerAction,
-  incorrectAnswerAction,
-  answerType,
-  quizType,
-} from '../../store/modules/quizSlice';
+import { stepAction, answerAction, incorrectAnswerAction, answerType, quizType } from '../../store/modules/quizSlice';
 import Button from '../layout/button/index';
 import CheckedTypeRadio from '../checkedTypeRadio/index';
 import { QuizBox } from './style';
+import useRadioCheked from 'src/hooks/useRadioCheked';
+import Observer from 'src/@views/@common/Observer';
+import useObserver from 'src/hooks/useObserver';
+
+type GNBNavigatorType = 'prev' | 'next' | 'all' | 'none';
 
 const Quiz = () => {
   const dispatch = useDispatch();
@@ -23,23 +22,21 @@ const Quiz = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [answerFlag, setAnswerFlag] = useState(false);
 
-  const handleInputValue = (
-    e: KeyboardEvent<HTMLInputElement>,
-    correctAnswer: boolean,
-    currentStep: number
-  ) => {
+  const [navigatorShowing, setNavigatorShowing] = useState<GNBNavigatorType>('next');
+  const prevButtonObserver = useObserver(() => setNavigatorShowing('next'));
+
+  const handleInputValue = (e: KeyboardEvent<HTMLInputElement>, correctAnswer: boolean, currentStep: number) => {
     const { name, value } = e.currentTarget;
 
     if (correctAnswer) {
       setAnswerValue([...answerValue, { [name]: value }]);
     } else {
-      setIncorrectAnswerValue([
-        ...incorrectAnswerValue,
-        { [name]: value, question: quizData[currentStep].question },
-      ]);
+      setIncorrectAnswerValue([...incorrectAnswerValue, { [name]: value, question: quizData[currentStep].question }]);
     }
     setIsChecked(!isChecked);
   };
+
+  console.log('prevButtonObserver', prevButtonObserver.target);
 
   // 다음 문항으로 이동되는 함수
   const goNextStep = () => {
@@ -52,23 +49,11 @@ const Quiz = () => {
   };
 
   useEffect(() => {
-    // console.log(
-    //   quizData.map((item) => {
-    //     return item.correct_answer;
-    //   })
-    // );
-  }, [currentStep]);
-
-  useEffect(() => {
     setAnswerFlag(false);
 
     if (currentStep !== 0 && currentStep === quizData.length) {
       setIsCompleted(true);
     }
-
-    console.log('currentStep', currentStep);
-    console.log('answerValue', answerValue);
-    console.log('incorrectAnswerValue', incorrectAnswerValue);
   }, [currentStep]);
 
   useEffect(() => {
@@ -92,6 +77,8 @@ const Quiz = () => {
                   }}
                 />
               </h3>
+              <Observer observerProps={prevButtonObserver} />
+
               <ul>
                 <li>
                   <CheckedTypeRadio
@@ -124,10 +111,7 @@ const Quiz = () => {
       {isChecked && (
         <>
           <p>{answerFlag ? '정답입니다.' : '틀렸습니다.'}</p>
-          <Button
-            text={quizData.length === currentStep + 1 ? '결과보러 가기' : '다음 문항'}
-            goNextStep={goNextStep}
-          />
+          <Button text={quizData.length === currentStep + 1 ? '결과보러 가기' : '다음 문항'} goNextStep={goNextStep} />
         </>
       )}
     </QuizBox>
